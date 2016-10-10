@@ -46,7 +46,7 @@ System.out.println(joke.getValue());
 // get a random joke with a specifc category
 Joke joke = client.getRandomJoke("dev");
 
-// search jokes with free-text search
+// search jokes with free-text
 List<Joke> jokes = client.searchJokes("developer");
 
 // get a list of available categories
