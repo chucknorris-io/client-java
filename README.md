@@ -1,5 +1,10 @@
 # Official chucknorris.io api client for Java
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.chucknorris/client-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.chucknorris/client-java)
+[![Javadocs](http://www.javadoc.io/badge/io.chucknorris/client-java.svg?color=brightgreen)](http://www.javadoc.io/doc/io.chucknorris/client-java)
+[![Apache 2.0 License](https://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
+
 [chucknorris.io][] is a free JSON API for hand curated Chuck Norris facts.
 
 Chuck Norris facts are satirical factoids about martial artist and actor Chuck Norris that have become an Internet
