@@ -88,9 +88,9 @@ uploadArchives {
             }
 
             pom.project {
-                name "chucknorris.io Java client"
+                name "chucknorris.io client-java"
                 packaging "jar"
-                description "RestFB Messenger"
+                description "chucknorris.io api client library for java"
                 url "https://github.com/chucknorris-io/client-java"
 
                 scm {
