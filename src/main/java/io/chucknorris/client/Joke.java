@@ -33,38 +33,83 @@ public class Joke {
     private String iconUrl;
     private List<String> categories = new ArrayList<>();
 
+    /**
+     * Returns the unique id of the joke.
+     *
+     * @return the unique id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the unique id of the joke.
+     *
+     * @param id the unique id
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Returns the actual joke.
+     *
+     * @return the joke
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Sets the actual joke.
+     *
+     * @param value the joke value
+     */
     public void setValue(String value) {
         this.value = value;
     }
 
+    /**
+     * Returns the source url of the joke.
+     *
+     * @return the source url
+     */
     public String getSourceUrl() {
         return sourceUrl;
     }
 
+    /**
+     * Sets the source url of the joke.
+     *
+     * @param sourceUrl the source url
+     */
     public void setSourceUrl(String sourceUrl) {
         this.sourceUrl = sourceUrl;
     }
 
+    /**
+     * Returns the icon url of the joke.
+     *
+     * @return the icon url
+     */
     public String getIconUrl() {
         return iconUrl;
     }
 
+    /**
+     * Sets the icon url of the joke.
+     *
+     * @param iconUrl the source url
+     */
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
     }
 
+    /**
+     * Returns the categories associated with the joke.
+     *
+     * @return the categories, not null
+     */
     public List<String> getCategories() {
         if (categories == null) {
             categories = new ArrayList<>();
@@ -72,14 +117,29 @@ public class Joke {
         return categories;
     }
 
+    /**
+     * Sets the categories associated with the joke.
+     *
+     * @param categories the categories
+     */
     public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 
+    /**
+     * Adds a category to the list of categories associated with the joke.
+     *
+     * @param category the category
+     */
     public void addCategory(String category) {
         getCategories().add(category);
     }
 
+    /**
+     * Adds the categories to the list of categories associated with the joke.
+     *
+     * @param categories the categories
+     */
     public void addCategories(List<String> categories) {
         getCategories().addAll(categories);
     }
