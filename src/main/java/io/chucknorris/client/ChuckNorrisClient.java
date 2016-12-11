@@ -17,8 +17,10 @@
 package io.chucknorris.client;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,9 +57,8 @@ public class ChuckNorrisClient {
                 }
                 return categories;
             } else {
-                String errorMessage = getErrorMessage(conn);
-                throw new ChuckNorrisException(
-                        "Error retrieving categories: (#" + respCode + ") " + errorMessage);
+                ChuckNorrisException e = createException(conn);
+                throw e;
             }
         } catch (IOException e) {
             throw new ChuckNorrisException("Error retrieving categories", e);
@@ -85,7 +86,7 @@ public class ChuckNorrisClient {
         try {
             StringBuilder url = new StringBuilder(BASE_URL + "/random");
             if (category != null && category.length() > 0) {
-                url.append("?category=").append(category);
+                url.append("?category=").append(urlEncode(category));
             }
             HttpURLConnection conn = createConnection(url.toString());
             int respCode = conn.getResponseCode();
@@ -93,9 +94,8 @@ public class ChuckNorrisClient {
                 JSONObject jsonObject = new JSONObject(new JSONTokener(conn.getInputStream()));
                 return parseJoke(jsonObject);
             } else {
-                String errorMessage = getErrorMessage(conn);
-                throw new ChuckNorrisException(
-                        "Error retrieving random joke: (#" + respCode + ") " + errorMessage);
+                ChuckNorrisException e = createException(conn);
+                throw e;
             }
         } catch (IOException e) {
             throw new ChuckNorrisException("Error retrieving random joke", e);
@@ -112,7 +112,7 @@ public class ChuckNorrisClient {
     public List<Joke> searchJokes(String query) {
         try {
             StringBuilder url = new StringBuilder(BASE_URL + "/search");
-            url.append("?query=").append(query);
+            url.append("?query=").append(urlEncode(query));
             HttpURLConnection conn = createConnection(url.toString());
             int respCode = conn.getResponseCode();
             if (respCode == HttpURLConnection.HTTP_OK) {
@@ -127,12 +127,32 @@ public class ChuckNorrisClient {
                 }
                 return jokes;
             } else {
-                String errorMessage = getErrorMessage(conn);
-                throw new ChuckNorrisException(
-                        "Error searching jokes: (#" + respCode + ") " + errorMessage);
+                ChuckNorrisException e = createException(conn);
+                throw e;
             }
         } catch (IOException e) {
             throw new ChuckNorrisException("Error searching jokes", e);
+        }
+    }
+
+    /**
+     * Returns the version string or {@code null} if it cannot be determined.
+     *
+     * @see Package#getImplementationVersion()
+     */
+    private String getVersion() {
+        Package pkg = ChuckNorrisClient.class.getPackage();
+        return (pkg != null ? pkg.getImplementationVersion() : null);
+    }
+
+    /**
+     * Encodes the given string.
+     */
+    private String urlEncode(String s) {
+        try {
+            return URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new ChuckNorrisException("Unable to url encode string: " + s, e);
         }
     }
 
@@ -141,19 +161,17 @@ public class ChuckNorrisClient {
      */
     private HttpURLConnection createConnection(String url) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-        conn.setRequestProperty("User-Agent",
-                "chucknorris-io/client-java-" + getVersion());
+        conn.setRequestProperty("User-Agent", "chucknorris-io/client-java-" + getVersion());
         return conn;
     }
 
     /**
-     * Returns the version string or {@code null} if it cannot be determined.
-     * 
-     * @see Package#getImplementationVersion()
+     * Creates a new {@link ChuckNorrisException} from the given connection's error stream.
      */
-    private String getVersion() {
-        Package pkg = ChuckNorrisClient.class.getPackage();
-        return (pkg != null ? pkg.getImplementationVersion() : null);
+    private ChuckNorrisException createException(HttpURLConnection conn) throws IOException {
+        JSONObject jsonObject = new JSONObject(new JSONTokener(conn.getErrorStream()));
+        String message = jsonObject.optString("message");
+        return new ChuckNorrisException(message);
     }
 
     /**
@@ -172,10 +190,5 @@ public class ChuckNorrisClient {
             }
         }
         return joke;
-    }
-
-    private String getErrorMessage(HttpURLConnection conn) throws IOException {
-        JSONObject jsonObject = new JSONObject(new JSONTokener(conn.getErrorStream()));
-        return jsonObject.optString("message");
     }
 }
