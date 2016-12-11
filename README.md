@@ -26,7 +26,7 @@ _Maven_:
 <dependency>
   <groupId>io.chucknorris</groupId>
   <artifactId>client-java</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@ _Gradle_:
 
 ```groovy
 dependencies {
-    compile "io.chucknorris:client-java:1.0.1"
+    compile "io.chucknorris:client-java:1.0.2-SNAPSHOT"
 }
 ```
 
